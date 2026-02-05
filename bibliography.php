@@ -11,12 +11,12 @@ $items = $data['bibliography'];
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kaynakça - Matematik Tarihi Portal</title>
+  <title>Kaynakça - MAT PROJE</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header class="header">
-  <div class="brand">Kaynakça Merkezi</div>
+  <div class="brand">MAT PROJE</div>
   <nav><a href="index.php">← Portala Dön</a></nav>
 </header>
 

@@ -10,7 +10,7 @@ $data = getPortalData();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Matematik Tarihi Akademik Portal</title>
+  <title>MAT PROJE</title>
   <link rel="stylesheet" href="styles.css">
   <script>
     window.PORTAL_DATA = <?= json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
@@ -23,7 +23,7 @@ $data = getPortalData();
 </head>
 <body>
 <header class="header">
-  <div class="brand">Matematik Tarihi Akademik Portal</div>
+  <div class="brand">MAT PROJE</div>
   <nav>
     <a href="#timeline">Zaman Çizelgesi</a>
     <a href="#articles">Makaleler</a>
