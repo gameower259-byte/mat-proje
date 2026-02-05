@@ -33,6 +33,10 @@ $data = getPortalData();
   </nav>
 </header>
 
+<section class="hero-title-wrap">
+  <h1 class="hero-title">MAT PROJE</h1>
+</section>
+
 <section class="controls">
   <input id="searchInput" type="text" placeholder="Makale, problem, proje veya kaynak ara">
   <select id="levelSelect">

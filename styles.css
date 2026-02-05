@@ -29,6 +29,13 @@ body {
 .header a:hover { color: var(--text); }
 .brand { font-weight: 700; letter-spacing: .03em; }
 
+.hero-title-wrap { padding: 14px 28px 0; }
+.hero-title {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  letter-spacing: .04em;
+}
+
 .controls {
   display: grid;
   gap: 12px;
