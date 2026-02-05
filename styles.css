@@ -65,6 +65,12 @@ body {
   padding: 14px;
 }
 .card h3 { margin: 6px 0 8px; }
+.clickable-title {
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgba(121, 168, 255, 0.45);
+  text-underline-offset: 3px;
+}
 .meta { font-size: .82rem; color: var(--accent); }
 .formula {
   margin: 10px 0;

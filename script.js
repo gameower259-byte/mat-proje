@@ -81,14 +81,15 @@
     card.className = 'card';
     card.innerHTML = `
       <span class="meta">${item.category} · ${item.level}. Sınıf</span>
-      <h3>${item.title}</h3>
+      <h3 class="clickable-title" data-kind="article" data-title="${item.article}">${item.title}</h3>
       <p>${item.summary}</p>
-      <div class="formula" data-kind="formula" data-title="${item.article}" data-description="${item.article_detail}">$$${item.formula}$$</div>
-      <button class="btn-detail" data-kind="formula" data-title="${item.article}" data-description="${item.article_detail}">Formül + Makale Adımları</button>
-      <button class="btn-detail" data-kind="article" data-title="${item.article}" data-description="${item.article_detail}">Makale Detayını Aç</button>
+      <div class="formula" data-kind="formula" data-title="${item.article}">$$${item.formula}$$</div>
+      <button class="btn-detail" data-kind="formula" data-title="${item.article}">Formül + Makale Adımları</button>
+      <button class="btn-detail" data-kind="article" data-title="${item.article}">Makale Detayını Aç</button>
       <small>Kaynak: ${item.source}</small>
     `;
     card.dataset.formulaSteps = JSON.stringify(item.formula_steps);
+    card.dataset.articleDetail = item.article_detail;
     return card;
   }
 
@@ -97,11 +98,12 @@
     card.className = 'card';
     card.innerHTML = `
       <span class="meta">${item.level}. Sınıf · Makale</span>
-      <h3>${item.article}</h3>
+      <h3 class="clickable-title" data-kind="article" data-title="${item.article}">${item.article}</h3>
       <p>${item.article_detail}</p>
-      <button class="btn-detail" data-kind="article" data-title="${item.article}" data-description="${item.article_detail}">Tam Makaleyi Oku</button>
+      <button class="btn-detail" data-kind="article" data-title="${item.article}">Tam Makaleyi Oku</button>
     `;
     card.dataset.articleSteps = JSON.stringify(item.formula_steps);
+    card.dataset.articleDetail = item.article_detail;
     return card;
   }
 
@@ -207,21 +209,23 @@
   content.addEventListener('click', (event) => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
-    if (!target.classList.contains('btn-detail') && !target.classList.contains('formula')) return;
+    if (!target.classList.contains('btn-detail') && !target.classList.contains('formula') && !target.classList.contains('clickable-title')) return;
 
     const card = target.closest('.card');
     if (!card) return;
 
     const kind = target.dataset.kind;
     const title = target.dataset.title || 'Detay';
-    const description = target.dataset.description || '';
+    let description = card.dataset.articleDetail || '';
 
     let steps = [];
     if (kind === 'formula' || kind === 'article') {
       steps = JSON.parse(card.dataset.formulaSteps || card.dataset.articleSteps || '[]');
     } else if (kind === 'problem') {
+      description = target.dataset.description || '';
       steps = JSON.parse(card.dataset.problemSteps || '[]');
     } else if (kind === 'project') {
+      description = target.dataset.description || '';
       steps = JSON.parse(card.dataset.projectSteps || '[]');
     }
 
