@@ -84,7 +84,7 @@ function getPortalData(): array
         ],
     ];
 
-    $problems = [
+    $problemTemplates = [
         [
             'title' => 'Pisagor Uygulaması',
             'level' => 7,
@@ -125,7 +125,23 @@ function getPortalData(): array
         ],
     ];
 
-    $projects = [
+    $problems = [];
+    for ($i = 1; $i <= 5000; $i++) {
+        $template = $problemTemplates[$i % count($problemTemplates)];
+        $problem = $template;
+        $problem['title'] = sprintf('%s #%d', $template['title'], $i);
+        $problem['description'] = sprintf('%s (Set %d)', $template['description'], $i);
+        $problem['detail'] = sprintf('%s Ek çalışma seti numarası: %d.', $template['detail'], $i);
+        $problem['steps'] = array_map(
+            static fn(string $step, int $index): string => sprintf('%d.%d %s', $i, $index + 1, $step),
+            $template['steps'],
+            array_keys($template['steps'])
+        );
+        $problem['level'] = 5 + ($i % 8);
+        $problems[] = $problem;
+    }
+
+    $projectTemplates = [
         [
             'title' => 'Matematik Tarihi Dijital Sergisi',
             'level' => 8,
@@ -150,7 +166,23 @@ function getPortalData(): array
         ],
     ];
 
-    $scientists = [
+    $projects = [];
+    for ($i = 1; $i <= 5000; $i++) {
+        $template = $projectTemplates[$i % count($projectTemplates)];
+        $project = $template;
+        $project['title'] = sprintf('%s #%d', $template['title'], $i);
+        $project['description'] = sprintf('%s (Proje paketi %d)', $template['description'], $i);
+        $project['detail'] = sprintf('%s Uygulama seri numarası: %d.', $template['detail'], $i);
+        $project['deliverables'] = array_map(
+            static fn(string $item, int $index): string => sprintf('%d.%d %s', $i, $index + 1, $item),
+            $template['deliverables'],
+            array_keys($template['deliverables'])
+        );
+        $project['level'] = 5 + ($i % 8);
+        $projects[] = $project;
+    }
+
+    $scientistTemplates = [
         [
             'name' => 'Öklid',
             'era' => 'Antik Yunan',
@@ -166,6 +198,15 @@ function getPortalData(): array
             'detail' => 'El-Harezmi, cebirsel yöntemleri sistemli hale getirerek denklem çözümünde yeni bir dönem başlatmıştır. Algoritma kavramına ilham veren yaklaşımı modern hesaplamanın temel taşlarındandır.',
         ],
     ];
+
+    $scientists = [];
+    for ($i = 1; $i <= 5000; $i++) {
+        $template = $scientistTemplates[$i % count($scientistTemplates)];
+        $scientist = $template;
+        $scientist['name'] = sprintf('%s Arşiv Kaydı #%d', $template['name'], $i);
+        $scientist['detail'] = sprintf('%s Bu biyografi kaydı, genişletilmiş akademik veri setinin %d numaralı girdisidir.', $template['detail'], $i);
+        $scientists[] = $scientist;
+    }
 
     $timeline = [];
     for ($year = -800; $year <= 2025; $year += 5) {
