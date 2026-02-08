@@ -3,6 +3,8 @@
     activeTab: 'timeline',
     search: '',
     level: 'all',
+    page: 1,
+    pageSize: 18,
   };
 
   const data = window.PORTAL_DATA;
@@ -51,15 +53,24 @@
   }
 
   function renderCards(items, renderer) {
+    const visibleItems = items.slice(0, state.page * state.pageSize);
     content.innerHTML = '';
-    if (!items.length) {
+    if (!visibleItems.length) {
       content.innerHTML = '<div class="card">Filtreye uygun içerik bulunamadı.</div>';
       return;
     }
-    items.forEach((item) => {
+    visibleItems.forEach((item) => {
       const card = renderer(item);
       content.appendChild(card);
     });
+
+    if (visibleItems.length < items.length) {
+      const more = document.createElement('div');
+      more.className = 'card';
+      more.innerHTML = '<strong>Daha fazla içerik için aşağı kaydırın.</strong>';
+      content.appendChild(more);
+    }
+
     if (window.MathJax && typeof window.MathJax.typeset === 'function') {
       window.MathJax.typeset();
     }
@@ -70,14 +81,15 @@
     card.className = 'card';
     card.innerHTML = `
       <span class="meta">${item.category} · ${item.level}. Sınıf</span>
-      <h3>${item.title}</h3>
+      <h3 class="clickable-title" data-kind="article" data-title="${item.article}">${item.title}</h3>
       <p>${item.summary}</p>
-      <div class="formula" data-kind="formula" data-title="${item.title}" data-description="${item.formula}">$$${item.formula}$$</div>
-      <button class="btn-detail" data-kind="formula" data-title="${item.title}" data-description="${item.summary}">Formül Çözüm Adımları</button>
-      <button class="btn-detail" data-kind="article" data-title="${item.article}" data-description="${item.article_detail}">Makale Detayını Aç</button>
+      <div class="formula" data-kind="formula" data-title="${item.article}">$$${item.formula}$$</div>
+      <button class="btn-detail" data-kind="formula" data-title="${item.article}">Formül + Makale Adımları</button>
+      <button class="btn-detail" data-kind="article" data-title="${item.article}">Makale Detayını Aç</button>
       <small>Kaynak: ${item.source}</small>
     `;
     card.dataset.formulaSteps = JSON.stringify(item.formula_steps);
+    card.dataset.articleDetail = item.article_detail;
     return card;
   }
 
@@ -86,11 +98,12 @@
     card.className = 'card';
     card.innerHTML = `
       <span class="meta">${item.level}. Sınıf · Makale</span>
-      <h3>${item.article}</h3>
+      <h3 class="clickable-title" data-kind="article" data-title="${item.article}">${item.article}</h3>
       <p>${item.article_detail}</p>
-      <button class="btn-detail" data-kind="article" data-title="${item.article}" data-description="${item.article_detail}">Tam Makaleyi Oku</button>
+      <button class="btn-detail" data-kind="article" data-title="${item.article}">Tam Makaleyi Oku</button>
     `;
     card.dataset.articleSteps = JSON.stringify(item.formula_steps);
+    card.dataset.articleDetail = item.article_detail;
     return card;
   }
 
@@ -162,14 +175,19 @@
     renderCards(data.scientists.filter((x) => matchesSearch(`${x.name} ${x.detail} ${x.specialty}`)), scientistRenderer);
   }
 
+  function resetAndRender() {
+    state.page = 1;
+    render();
+  }
+
   searchInput.addEventListener('input', (event) => {
     state.search = event.target.value;
-    render();
+    resetAndRender();
   });
 
   levelSelect.addEventListener('change', (event) => {
     state.level = event.target.value;
-    render();
+    resetAndRender();
   });
 
   tabs.forEach((tab) => {
@@ -177,28 +195,37 @@
       tabs.forEach((x) => x.classList.remove('active'));
       tab.classList.add('active');
       state.activeTab = tab.dataset.tab;
-      render();
+      resetAndRender();
     });
+  });
+
+  window.addEventListener('scroll', () => {
+    const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 220;
+    if (!nearBottom) return;
+    state.page += 1;
+    render();
   });
 
   content.addEventListener('click', (event) => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
-    if (!target.classList.contains('btn-detail') && !target.classList.contains('formula')) return;
+    if (!target.classList.contains('btn-detail') && !target.classList.contains('formula') && !target.classList.contains('clickable-title')) return;
 
     const card = target.closest('.card');
     if (!card) return;
 
     const kind = target.dataset.kind;
     const title = target.dataset.title || 'Detay';
-    const description = target.dataset.description || '';
+    let description = card.dataset.articleDetail || '';
 
     let steps = [];
     if (kind === 'formula' || kind === 'article') {
       steps = JSON.parse(card.dataset.formulaSteps || card.dataset.articleSteps || '[]');
     } else if (kind === 'problem') {
+      description = target.dataset.description || '';
       steps = JSON.parse(card.dataset.problemSteps || '[]');
     } else if (kind === 'project') {
+      description = target.dataset.description || '';
       steps = JSON.parse(card.dataset.projectSteps || '[]');
     }
 
