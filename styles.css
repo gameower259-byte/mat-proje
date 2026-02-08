@@ -29,6 +29,13 @@ body {
 .header a:hover { color: var(--text); }
 .brand { font-weight: 700; letter-spacing: .03em; }
 
+.hero-title-wrap { padding: 14px 28px 0; }
+.hero-title {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  letter-spacing: .04em;
+}
+
 .controls {
   display: grid;
   gap: 12px;
@@ -65,6 +72,12 @@ body {
   padding: 14px;
 }
 .card h3 { margin: 6px 0 8px; }
+.clickable-title {
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgba(121, 168, 255, 0.45);
+  text-underline-offset: 3px;
+}
 .meta { font-size: .82rem; color: var(--accent); }
 .formula {
   margin: 10px 0;
