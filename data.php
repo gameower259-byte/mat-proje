@@ -25,6 +25,10 @@ function getCategory(int $year): string
 
 function getPortalData(): array
 {
+    $problemCount = 5000;
+    $projectCount = 5000;
+    $scientistCount = 5000;
+
     $events = [
         [
             'title' => 'Pisagor Teoremi Gelişimi',
@@ -82,6 +86,20 @@ function getPortalData(): array
                 'Elde edilen sonuç, [a,b] aralığındaki net alan/birikim değeridir.',
             ],
         ],
+        [
+            'title' => 'Olasılık ve Veri Analizi',
+            'summary' => 'Veri bilimi çağında olasılık kuralları ve istatistiksel çıkarımlar.',
+            'formula' => 'P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}',
+            'article' => 'Olasılık Teorisi ve Veri Biliminde Kullanımı',
+            'source' => 'İstatistik Araştırmaları',
+            'article_detail' => 'Bu makalede koşullu olasılık, Bayes yaklaşımı ve veri analizi uygulamaları ele alınır. Örnek veri setleri üzerinden model kurma, tahmin ve karar destek süreçleri açıklanır.',
+            'formula_steps' => [
+                'A ve B olaylarını tanımla.',
+                'A ile B’nin kesişim olasılığını hesapla.',
+                'B olayının gerçekleşme olasılığını bul.',
+                'Koşullu olasılığı P(A|B)=P(A∩B)/P(B) olarak yorumla.',
+            ],
+        ],
     ];
 
     $problemTemplates = [
@@ -123,10 +141,22 @@ function getPortalData(): array
                 'Tepe noktası (3,-1) ve minimum değer -1.',
             ],
         ],
+        [
+            'title' => 'Olasılık Senaryosu',
+            'level' => 9,
+            'description' => 'Bir sınıfta öğrencilerin %40’ı kızdır. Rastgele seçilen iki öğrencinin ikisinin de kız olma olasılığı nedir?',
+            'detail' => 'Bu problemde bağımsız olaylar varsayılır. Öğrenci önce tek seçimde kız olma olasılığını belirler, sonra iki ardışık seçim için olasılıkları çarpar.',
+            'steps' => [
+                'Tek seçim olasılığı: 0.40.',
+                'Bağımsızlık varsayımıyla ikinci seçim olasılığı yine 0.40.',
+                'Çarp: 0.40 × 0.40 = 0.16.',
+                'Sonuç: %16 olasılık.',
+            ],
+        ],
     ];
 
     $problems = [];
-    for ($i = 1; $i <= 5000; $i++) {
+    for ($i = 1; $i <= $problemCount; $i++) {
         $template = $problemTemplates[$i % count($problemTemplates)];
         $problem = $template;
         $problem['title'] = sprintf('%s #%d', $template['title'], $i);
@@ -164,10 +194,21 @@ function getPortalData(): array
                 'Güvenlik analizi ve sonuç sunumu',
             ],
         ],
+        [
+            'title' => 'Veri Görselleştirme Atölyesi',
+            'level' => 10,
+            'description' => 'Matematiksel veri setlerinden grafik ve gösterge paneli hazırlama çalışması.',
+            'detail' => 'Öğrenciler gerçek verileri toplayıp temizler, uygun grafik türünü seçer ve sonuçları yorumlar. İstatistiksel eğilimler ve aykırı değerler tartışılır.',
+            'deliverables' => [
+                'En az 2 farklı grafik türü',
+                'Kısa veri temizleme raporu',
+                'Sunum + yorum notları',
+            ],
+        ],
     ];
 
     $projects = [];
-    for ($i = 1; $i <= 5000; $i++) {
+    for ($i = 1; $i <= $projectCount; $i++) {
         $template = $projectTemplates[$i % count($projectTemplates)];
         $project = $template;
         $project['title'] = sprintf('%s #%d', $template['title'], $i);
@@ -197,10 +238,17 @@ function getPortalData(): array
             'photo' => 'https://upload.wikimedia.org/wikipedia/commons/3/3b/Al-Khwarizmi-798-850.jpg',
             'detail' => 'El-Harezmi, cebirsel yöntemleri sistemli hale getirerek denklem çözümünde yeni bir dönem başlatmıştır. Algoritma kavramına ilham veren yaklaşımı modern hesaplamanın temel taşlarındandır.',
         ],
+        [
+            'name' => 'Emmy Noether',
+            'era' => 'Modern Dönem',
+            'specialty' => 'Cebir ve Fizik',
+            'photo' => 'https://upload.wikimedia.org/wikipedia/commons/7/7f/Emmy_Noether.jpg',
+            'detail' => 'Noether, simetri ve korunma yasaları arasındaki ilişkiyi açıklayan teoremiyle modern fizik ve cebire yön vermiştir.',
+        ],
     ];
 
     $scientists = [];
-    for ($i = 1; $i <= 5000; $i++) {
+    for ($i = 1; $i <= $scientistCount; $i++) {
         $template = $scientistTemplates[$i % count($scientistTemplates)];
         $scientist = $template;
         $scientist['name'] = sprintf('%s Arşiv Kaydı #%d', $template['name'], $i);

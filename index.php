@@ -2,8 +2,23 @@
 
 declare(strict_types=1);
 
+require __DIR__ . '/security.php';
+require __DIR__ . '/database.php';
+enforceSecurityHeaders();
+enforceRateLimit('portal-index', 120, 60);
+
 require __DIR__ . '/data.php';
 $data = getPortalData();
+$counts = [
+  'timeline' => count($data['timeline']),
+  'articles' => count($data['timeline']),
+  'problems' => count($data['problems']),
+  'projects' => count($data['projects']),
+  'scientists' => count($data['scientists']),
+];
+$totalContent = $counts['timeline'] + $counts['problems'] + $counts['projects'] + $counts['scientists'];
+$stats = getPortalStats();
+logPortalVisit('index');
 ?>
 <!doctype html>
 <html lang="tr">
@@ -47,6 +62,29 @@ $data = getPortalData();
     <button class="tab" data-tab="problems">Problemler</button>
     <button class="tab" data-tab="projects">Projeler</button>
     <button class="tab" data-tab="scientists">Bilim İnsanları</button>
+  </div>
+</section>
+
+<section class="status-panel">
+  <div class="status-card">
+    <h2>Sistem Durumu</h2>
+    <ul>
+      <li><strong>Toplam içerik:</strong> <?= number_format($totalContent) ?> kayıt</li>
+      <li><strong>SQL günlük kayıtları:</strong> <?= number_format($stats['total_visits']) ?> ziyaret</li>
+      <li><strong>Son 24 saat:</strong> <?= number_format($stats['last_24h']) ?> istek</li>
+      <li><strong>DDoS/DoS Limiti:</strong> 60 sn içinde 120 istek</li>
+      <li><strong>Veri Seti:</strong> Her modülde 5.000 içerik + zaman çizelgesi</li>
+    </ul>
+  </div>
+  <div class="status-card">
+    <h2>İçerik Dağılımı</h2>
+    <ul>
+      <li><strong>Zaman Çizelgesi:</strong> <?= number_format($counts['timeline']) ?></li>
+      <li><strong>Makaleler:</strong> <?= number_format($counts['articles']) ?></li>
+      <li><strong>Problemler:</strong> <?= number_format($counts['problems']) ?></li>
+      <li><strong>Projeler:</strong> <?= number_format($counts['projects']) ?></li>
+      <li><strong>Bilim İnsanları:</strong> <?= number_format($counts['scientists']) ?></li>
+    </ul>
   </div>
 </section>
 
