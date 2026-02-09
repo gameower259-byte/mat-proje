@@ -2,9 +2,16 @@
 
 declare(strict_types=1);
 
+require __DIR__ . '/security.php';
+require __DIR__ . '/database.php';
+enforceSecurityHeaders();
+enforceRateLimit('portal-bibliography', 90, 60);
+
 require __DIR__ . '/data.php';
 $data = getPortalData();
 $items = $data['bibliography'];
+$stats = getPortalStats();
+logPortalVisit('bibliography');
 ?>
 <!doctype html>
 <html lang="tr">
@@ -23,6 +30,10 @@ $items = $data['bibliography'];
 <main class="bibliography-page">
   <h1>Akademik Kaynakça</h1>
   <p>Zaman çizelgesinde kullanılan makale ve kaynakların listesi.</p>
+  <div class="status-inline">
+    <span><strong>Toplam ziyaret:</strong> <?= number_format($stats['total_visits']) ?></span>
+    <span><strong>Son 24 saat:</strong> <?= number_format($stats['last_24h']) ?> istek</span>
+  </div>
   <div class="list">
     <?php foreach ($items as $item): ?>
       <article class="biblio-item">

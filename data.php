@@ -25,6 +25,13 @@ function getCategory(int $year): string
 
 function getPortalData(): array
 {
+    $targetTotalRecords = 90000;
+    $timelineCount = (int) floor((2025 - (-800)) / 5) + 1;
+    $coreTarget = max(0, $targetTotalRecords - $timelineCount);
+    $problemCount = intdiv($coreTarget, 3);
+    $projectCount = intdiv($coreTarget, 3);
+    $scientistCount = $coreTarget - $problemCount - $projectCount;
+
     $events = [
         [
             'title' => 'Pisagor Teoremi Gelişimi',
@@ -126,7 +133,7 @@ function getPortalData(): array
     ];
 
     $problems = [];
-    for ($i = 1; $i <= 5000; $i++) {
+    for ($i = 1; $i <= $problemCount; $i++) {
         $template = $problemTemplates[$i % count($problemTemplates)];
         $problem = $template;
         $problem['title'] = sprintf('%s #%d', $template['title'], $i);
@@ -167,7 +174,7 @@ function getPortalData(): array
     ];
 
     $projects = [];
-    for ($i = 1; $i <= 5000; $i++) {
+    for ($i = 1; $i <= $projectCount; $i++) {
         $template = $projectTemplates[$i % count($projectTemplates)];
         $project = $template;
         $project['title'] = sprintf('%s #%d', $template['title'], $i);
@@ -200,7 +207,7 @@ function getPortalData(): array
     ];
 
     $scientists = [];
-    for ($i = 1; $i <= 5000; $i++) {
+    for ($i = 1; $i <= $scientistCount; $i++) {
         $template = $scientistTemplates[$i % count($scientistTemplates)];
         $scientist = $template;
         $scientist['name'] = sprintf('%s Arşiv Kaydı #%d', $template['name'], $i);
